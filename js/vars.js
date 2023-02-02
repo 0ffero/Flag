@@ -22,7 +22,7 @@ var vars = {
 
         start: ()=> {
             let aV = vars.App;
-            aV.flag = new Flag(aV.which, { animate: false });
+            aV.flag = new Flag(aV.which);
         },
 
         switchFlagTo: (_to)=> {
