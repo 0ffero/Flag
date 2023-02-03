@@ -1,7 +1,7 @@
 const consts = {
     appName: 'Flags',
     canvas: {
-		colour: '#000020',
+		colour: '#111111',
 		width: 1280, height: 720,
         cX: 1280/2, cY: 720/2
 	},
@@ -14,7 +14,7 @@ const consts = {
 			url: window.location.href,
 			version: vars.version,
 			type: Phaser.WEBGL,
-			backgroundColor: '#000020',
+			backgroundColor: '#111111',
 			disableContextMenu: true,
 			height: consts.canvas.height,
 			width: consts.canvas.width,
@@ -24,7 +24,7 @@ const consts = {
 				width: consts.canvas.width,
 				height: consts.canvas.height,
 			},
-			scene: { preload: preload, create: create }
+			scene: { preload: preload, create: create, update: update }
 		};
 	}
 };

@@ -38,6 +38,17 @@ let Flag = class {
 
         // INIT FLAG VARS
         this.flags = {
+            '04': [
+                [2,2,2,2,2,2,2,2,2],
+                [2,2,1,2,2,2,2,2,2],
+                [2,1,2,1,2,2,2,2,2],
+                [2,1,2,1,2,1,2,1,2],
+                [2,1,2,1,2,1,2,1,2],
+                [2,2,1,2,2,1,1,1,2],
+                [2,2,2,2,2,2,2,1,2],
+                [2,2,2,2,2,2,2,1,2],
+                [2,2,2,2,2,2,2,2,2],
+            ],
             england: [
                 [1,1,1,1,3,1,1,1,1],
                 [1,1,1,1,3,1,1,1,1],
@@ -198,7 +209,7 @@ let Flag = class {
     generateFlag() {
         let flagData = this.flags[this.flagType];
         if (!flagData) return `Invalid flag type! - Valid: ${this.availableFlags.join(', ').trim()}.`;
-        
+
         let scene = this.scene;
 
 
@@ -209,12 +220,15 @@ let Flag = class {
         container.tween && container.tween.remove();
         let x = 0; let y = 0;
         let maxX = 0; let maxY = 0;
+        let hO = vars.App.hue.objects = [];
         flagData.forEach((_row,_r)=> {
             _row.forEach((_col,_c)=> {
                 let frame = !_col ? 'flag_position_black' : 'flag_position';
-                let image = scene.add.image(x, y, frame).setTint(!_col ? 0xffffff : flagColours[_col]);
+                let tint = flagColours[_col];
+                let image = scene.add.image(x, y, frame).setTint(!_col ? 0xffffff : tint);
                 image.vars = { row: _r, col: _c }; // used for animating
                 container.add(image);
+                (this.flagType==='04' && tint===0xffffff && _col) && (hO.push(image));
                 x+=spacing.x;
                 x>maxX&&(maxX=x);
             });
@@ -229,7 +243,7 @@ let Flag = class {
     placeContainer() {
         let container = this.flagContainer;
 
-        let realXY = { x: this.containerXY.x-container.width/2+50, y: this.containerXY.y-container.height/2+50 };
+        let realXY = { x: this.containerXY.x-container.width/2+90, y: this.containerXY.y-container.height/2 };
         if (this.animateContainer) {
             // place container off of screen
             container.setPosition(-container.width/2, realXY.y);
@@ -249,6 +263,7 @@ let Flag = class {
         let newFlagVars = this.flags[newFlag].flat(1);
         let colours = this.flagColours;
 
+        let hO = vars.App.hue.objects = [];
         let children = this.flagContainer.getAll();
         children.forEach((_c,_i)=> {
             let colour = colours[newFlagVars[_i]]
@@ -256,6 +271,7 @@ let Flag = class {
                 _c.clearTint().setTexture('flag_position_black');
             } else {
                 _c.setTexture('flag_position');
+                (_newFlag==='04' && colour===0xffffff) && (hO.push(_c));
                 _c.setTint(colour);
             };
         });
